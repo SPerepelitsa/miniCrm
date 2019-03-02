@@ -15,10 +15,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Auth::routes(['register' => false]);
+
+Route::get('/home', 'HomeController@index')->name('home');
+
 Route::get('/dashboard', function () {
     return view('admin/dashboard');
 })->middleware('auth');
 
-Auth::routes(['register' => false]);
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('companies', 'CompanyController')->middleware('auth');
+});

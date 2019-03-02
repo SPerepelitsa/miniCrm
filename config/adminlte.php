@@ -110,9 +110,9 @@ return [
     'menu' => [
         'MAIN NAVIGATION',
         [
-            'text' => 'Blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'text' => 'Companies',
+            'url'  => 'admin/companies',
+            'icon_color' => 'yellow',
         ],
         [
             'text'        => 'Pages',
@@ -202,7 +202,7 @@ return [
         JeroenNoten\LaravelAdminLte\Menu\Filters\ActiveFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\SubmenuFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
-        JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,
+    //  JeroenNoten\LaravelAdminLte\Menu\Filters\GateFilter::class,
     ],
 
     /*

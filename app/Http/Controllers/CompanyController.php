@@ -14,7 +14,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        // TODO
+        $companies = Company::orderBy('id', 'desc')->paginate(10);
+
+        return view('admin.companies.index')->with('companies', $companies);
     }
 
     /**
@@ -24,7 +26,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        // TODO
+        return view('admin.companies.create');
     }
 
     /**
