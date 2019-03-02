@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use Session;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -32,56 +33,90 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        // TODO
+        $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'email',
+            'website' => 'nullable|url',
+            'image' => 'image|dimensions:max_width=100,max_height=100',
+        ]);
+
+        $company = new Company();
+        $company->name = $request->name;
+        $company->email = $request->email;
+        $company->website = $request->website;
+        $company->save();
+
+        return redirect()->route('companies.index')->with('success', 'Company was successfully created!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show($id)
     {
-        // TODO
+        $company = Company::findOrFail($id);
+
+        return view('admin.companies.show')->with('company', $company);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
-    public function edit(Company $company)
+    public function edit($id)
     {
-        // TODO
+        $company = Company::findOrFail($id);
+
+        return view('admin.companies.edit')->with('company', $company);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Company  $company
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(Request $request, $id)
     {
-        // TODO
+        $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'email',
+            'website' => 'nullable|url',
+            'image' => 'image|dimensions:max_width=100,max_height=100',
+        ]);
+        $company = Company::find($id);
+        $company->name = $request->name;
+        $company->email = $request->email;
+        $company->website = $request->website;
+        $company->save();
+
+        return redirect()->route('companies.index')->with('success', 'Company updated successfully');
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy($id)
     {
-        // TODO
+        $company = Company::findOrFail($id);
+        $company->delete();
+
+        return redirect()->route('companies.index')->with('success', 'Company was successfully deleted');
+
     }
 }

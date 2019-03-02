@@ -7,6 +7,9 @@
     <div class="row">
         <div class="col-md-10">
             <h1>Companies list</h1>
+
+            @include('partials._validation_messages')
+
         </div>
         <div class="col-md-2">
             <a href="{{ route('companies.create') }}" class="btn btn-lg btn-primary btn-block">New +</a>
@@ -65,5 +68,5 @@
             </div>
         </div>
     </div>
-
-@stop
+    <!--/.row-->
+@endsection
