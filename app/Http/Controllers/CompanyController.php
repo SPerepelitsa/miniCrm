@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Company;
 use Image;
 use Session;
+use Mail;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -58,6 +59,13 @@ class CompanyController extends Controller
             $company->logo = $filename;
         }
         $company->save();
+
+        Mail::send('emails.new_company', ['name'  => $company->name] , function($message)
+        {
+            $message->from('notifications@crm.com');
+            $message->to('admin@crm.com');
+            $message->subject('new company entered!');
+        });
 
         return redirect()->route('companies.index')->with('success', 'Company was successfully created!');
     }

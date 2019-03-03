@@ -16,7 +16,6 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = Employee::orderBy('id', 'desc')->paginate(10);
-//        dd($employees);
 
         return view('admin.employees.index')->with('employees', $employees);
     }
@@ -82,7 +81,6 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::findOrFail($id);
-//        dd($employee->company);
         $companies = Company::orderBy('name')->get();
 
         return view('admin.employees.edit')->with('employee', $employee)->with('companies', $companies);
