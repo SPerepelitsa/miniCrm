@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use Image;
 use Session;
 use Illuminate\Http\Request;
 
@@ -42,13 +43,20 @@ class CompanyController extends Controller
             'name' => 'required|max:255',
             'email' => 'email',
             'website' => 'nullable|url',
-            'image' => 'image|dimensions:max_width=100,max_height=100',
+            'image' => 'image|dimensions:min_width=100,min_height=100',
         ]);
 
         $company = new Company();
         $company->name = $request->name;
         $company->email = $request->email;
         $company->website = $request->website;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = md5(microtime(true)) . "." . $image->getClientOriginalExtension();
+            $location = storage_path('app/public/img/companies/' . $filename);
+            Image::make($image)->resize(200, 200)->save($location);
+            $company->logo = $filename;
+        }
         $company->save();
 
         return redirect()->route('companies.index')->with('success', 'Company was successfully created!');
@@ -93,16 +101,33 @@ class CompanyController extends Controller
             'name' => 'required|max:255',
             'email' => 'email',
             'website' => 'nullable|url',
-            'image' => 'image|dimensions:max_width=100,max_height=100',
+            'image' => 'image|dimensions:min_width=100,min_height=100',
+
         ]);
         $company = Company::find($id);
         $company->name = $request->name;
         $company->email = $request->email;
         $company->website = $request->website;
+
+        //adds a new picture to the storage
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = md5(microtime(true)) . "." . $image->getClientOriginalExtension();
+            $location = storage_path('app/public/img/companies/' . $filename);
+            Image::make($image)->resize(200, 200)->save($location);
+
+            //delets old picture from the storage if it exists.
+            if ($company->logo != null) {
+                $imgLocation = storage_path('app/public/img/companies/' . $company->logo);
+                if (file_exists($imgLocation)) {
+                    unlink($imgLocation);
+                }
+            }
+            $company->logo = $filename;
+        }
         $company->save();
 
         return redirect()->route('companies.index')->with('success', 'Company updated successfully');
-
     }
 
     /**
@@ -114,9 +139,14 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         $company = Company::findOrFail($id);
+        if ($company->logo != null) {
+            $imgLocation = storage_path('app/public/img/companies/' . $company->logo);
+            if (file_exists($imgLocation)) {
+                unlink($imgLocation);
+            }
+        }
         $company->delete();
 
         return redirect()->route('companies.index')->with('success', 'Company was successfully deleted');
-
     }
 }

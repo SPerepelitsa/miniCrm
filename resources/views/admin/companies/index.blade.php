@@ -38,7 +38,7 @@
 
                     <tr>
                         <th scope="row">{{$company->id}}</th>
-                        <td>{{$company->logo}}</td>
+                        <td><img src="{{ asset('storage/img/companies/'. $company->logo) }}" alt="{{$company->logo}}" height="50" width="50"></td>
                         <td>{{$company->name}}</td>
                         <td>{{$company->email}}</td>
                         <td>{{$company->website}}</td>
