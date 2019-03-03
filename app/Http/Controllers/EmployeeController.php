@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Employee;
 use App\Company;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreEmployee;
 
 class EmployeeController extends Controller
 {
@@ -38,15 +39,9 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEmployee $request)
     {
-        $request->validate([
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'company_id' => 'nullable|integer',
-            'email' => 'nullable|email',
-            'phone' => ['required','regex:/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/'],
-        ]);
+        $request->validated();
 
         $employee = new Employee();
         $employee->first_name = $request->first_name;
@@ -93,15 +88,9 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreEmployee $request, $id)
     {
-        $request->validate([
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'company_id' => 'nullable|integer',
-            'email' => 'nullable|email',
-            'phone' => ['required','regex:/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/'],
-        ]);
+        $request->validated();
 
         $employee = Employee::findOrFail($id);
         $employee->first_name = $request->first_name;

@@ -7,6 +7,7 @@ use Image;
 use Session;
 use Mail;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCompany;
 
 class CompanyController extends Controller
 {
@@ -38,14 +39,9 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCompany $request)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'nullable|email',
-            'website' => 'nullable|url',
-            'image' => 'image|dimensions:min_width=100,min_height=100',
-        ]);
+        $request->validated();
 
         $company = new Company();
         $company->name = $request->name;
@@ -103,15 +99,10 @@ class CompanyController extends Controller
      * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreCompany $request, $id)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'email',
-            'website' => 'nullable|url',
-            'image' => 'image|dimensions:min_width=100,min_height=100',
+        $request->validated();
 
-        ]);
         $company = Company::find($id);
         $company->name = $request->name;
         $company->email = $request->email;
