@@ -115,6 +115,11 @@ return [
             'icon_color' => 'yellow',
         ],
         [
+            'text' => 'Employees',
+            'url'  => 'admin/employees',
+            'icon_color' => 'aqua',
+        ],
+        [
             'text'        => 'Pages',
             'url'         => 'admin/pages',
             'icon'        => 'file',

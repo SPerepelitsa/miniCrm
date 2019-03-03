@@ -41,7 +41,7 @@ class CompanyController extends Controller
     {
         $request->validate([
             'name' => 'required|max:255',
-            'email' => 'email',
+            'email' => 'nullable|email',
             'website' => 'nullable|url',
             'image' => 'image|dimensions:min_width=100,min_height=100',
         ]);

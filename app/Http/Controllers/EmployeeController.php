@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Employee;
+use App\Company;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -14,7 +15,10 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        // TODO
+        $employees = Employee::orderBy('id', 'desc')->paginate(10);
+//        dd($employees);
+
+        return view('admin.employees.index')->with('employees', $employees);
     }
 
     /**
@@ -24,7 +28,9 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        $companies = Company::orderBy('name')->get();
+
+        return view('admin.employees.create')->with('companies', $companies);
     }
 
     /**
@@ -35,7 +41,23 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO
+        $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'company_id' => 'nullable|integer',
+            'email' => 'nullable|email',
+            'phone' => ['required','regex:/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/'],
+        ]);
+
+        $employee = new Employee();
+        $employee->first_name = $request->first_name;
+        $employee->last_name = $request->last_name;
+        $employee->company_id = $request->company_id;
+        $employee->email = $request->email;
+        $employee->phone = $request->phone;
+        $employee->save();
+
+        return redirect()->route('employees.index')->with('success', 'Employee was successfully created!');
     }
 
     /**
@@ -44,9 +66,11 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function show(Employee $employee)
+    public function show($id)
     {
-        // TODO
+        $employee = Employee::findOrFail($id);
+
+        return view('admin.employees.show')->with('employee', $employee);
     }
 
     /**
@@ -55,9 +79,13 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Employee $employee)
+    public function edit($id)
     {
-        // TODO
+        $employee = Employee::findOrFail($id);
+//        dd($employee->company);
+        $companies = Company::orderBy('name')->get();
+
+        return view('admin.employees.edit')->with('employee', $employee)->with('companies', $companies);
     }
 
     /**
@@ -67,9 +95,25 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request, $id)
     {
-        // TODO
+        $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'company_id' => 'nullable|integer',
+            'email' => 'nullable|email',
+            'phone' => ['required','regex:/^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/'],
+        ]);
+
+        $employee = Employee::findOrFail($id);
+        $employee->first_name = $request->first_name;
+        $employee->last_name = $request->last_name;
+        $employee->company_id = $request->company_id;
+        $employee->email = $request->email;
+        $employee->phone = $request->phone;
+        $employee->save();
+
+        return redirect()->route('employees.index')->with('success', 'Employee was successfully updated!');
     }
 
     /**
@@ -78,8 +122,11 @@ class EmployeeController extends Controller
      * @param  \App\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
-        // TODO
+        $employee = Employee::findOrFail($id);
+        $employee->delete();
+
+        return redirect()->route('employees.index')->with('success', 'Employee was successfully deleted!');
     }
 }
