@@ -18,7 +18,7 @@
                 <div class="text-center">
                     <p><b>First name: </b>{{$employee->first_name}}</p>
                     <p><b>Last name: </b>{{$employee->last_name}}</p>
-                    <p><b>Company: </b>{{$employee->company->name}}</p>
+                    <p><b>Company: </b>{{$employee->company['name']}}</p>
                     <p><b>Email: </b>{{$employee->email}}</p>
                     <p><b>Phone number: </b>{{$employee->phone}}</p>
                     <hr>

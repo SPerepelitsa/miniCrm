@@ -2,6 +2,10 @@
 
 @section('title', 'Employees')
 
+@push('css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+@endpush
+
 @section('content')
 
     <div class="row">
@@ -21,7 +25,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-hover">
+            <table id="employeesTable" class="table table-hover">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
@@ -30,6 +34,7 @@
                     <th scope="col">Company</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
+                    <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -70,4 +75,12 @@
         </div>
     </div>
     <!--/.row-->
+@endsection
+
+@section('js')
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#employeesTable').DataTable();
+        });
+    </script>
 @endsection

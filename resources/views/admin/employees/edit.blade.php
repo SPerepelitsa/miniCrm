@@ -31,7 +31,7 @@
                     <div class="form-group">
                         <label for="company_id" class="control-label">Company</label>
                         <select id="company_id" name="company_id" class="form-control" required autofocus>
-                            <option selected="selected" value="{{ $employee->company->id }}"> {{ $employee->company->name }} </option>
+                            <option selected="selected" value="{{ $employee->company['id'] }}"> {{ $employee->company['name'] }} </option>
 
                             @foreach($companies as $company)
                                 <option value="{{ $company->id }}"> {{ $company->name }} </option>

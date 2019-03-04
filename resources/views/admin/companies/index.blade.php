@@ -2,6 +2,10 @@
 
 @section('title', 'Companies')
 
+@push('css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+@endpush
+
 @section('content')
 
     <div class="row">
@@ -21,11 +25,10 @@
 
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-hover">
-                <thead class="thead-dark">
+            <table id="companiesTable" class="display">
+                <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Logo</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Website</th>
@@ -38,7 +41,6 @@
 
                     <tr>
                         <th scope="row">{{$company->id}}</th>
-                        <td><img src="{{ asset('storage/img/companies/'. $company->logo) }}" alt="{{$company->logo}}" height="50" width="50"></td>
                         <td>{{$company->name}}</td>
                         <td>{{$company->email}}</td>
                         <td>{{$company->website}}</td>
@@ -69,4 +71,12 @@
         </div>
     </div>
     <!--/.row-->
+@endsection
+
+@section('js')
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#companiesTable').DataTable();
+        });
+    </script>
 @endsection
