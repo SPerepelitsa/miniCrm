@@ -11,10 +11,28 @@
 |
 */
 
+//Start page route
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+//Auth route
+Auth::routes(['register' => false]);
 
+//Home
 Route::get('/home', 'HomeController@index')->name('home');
+
+//Admin dashboard route
+Route::get('/dashboard', function () {
+    return view('admin/dashboard');
+})->middleware('auth');
+
+//Companies routes
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('companies', 'CompanyController')->middleware('auth');
+});
+
+//Employees routes
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('employees', 'EmployeeController')->middleware('auth');
+});
