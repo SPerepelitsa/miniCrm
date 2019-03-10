@@ -7,6 +7,7 @@ use Image;
 use Session;
 use Mail;
 use Illuminate\Http\Request;
+use App\Filesystem\Storage\ImageStorage\ImageStorage;
 use App\Http\Requests\StoreCompany;
 
 class CompanyController extends Controller
@@ -43,15 +44,13 @@ class CompanyController extends Controller
     {
         $request->validated();
 
+        $imageStorage = new ImageStorage('companies');
         $company = new Company();
         $company->name = $request->name;
         $company->email = $request->email;
         $company->website = $request->website;
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = md5(microtime(true)) . "." . $image->getClientOriginalExtension();
-            $location = storage_path('app/public/img/companies/' . $filename);
-            Image::make($image)->resize(200, 200)->save($location);
+            $filename = $imageStorage->saveImage($request->file('image'));
             $company->logo = $filename;
         }
         $company->save();
@@ -103,24 +102,19 @@ class CompanyController extends Controller
     {
         $request->validated();
 
-        $company = Company::find($id);
+        $imageStorage = new ImageStorage('companies');
+        $company = Company::findOrFail($id);
         $company->name = $request->name;
         $company->email = $request->email;
         $company->website = $request->website;
 
         //adds a new picture to the storage
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = md5(microtime(true)) . "." . $image->getClientOriginalExtension();
-            $location = storage_path('app/public/img/companies/' . $filename);
-            Image::make($image)->resize(200, 200)->save($location);
+            $filename = $imageStorage->saveImage($request->file('image'));
 
             //delets old picture from the storage if it exists.
             if ($company->logo != null) {
-                $imgLocation = storage_path('app/public/img/companies/' . $company->logo);
-                if (file_exists($imgLocation)) {
-                    unlink($imgLocation);
-                }
+                $imageStorage->deleteImage($company->logo);
             }
             $company->logo = $filename;
         }
@@ -137,12 +131,10 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
+        $imageStorage = new ImageStorage('companies');
         $company = Company::findOrFail($id);
         if ($company->logo != null) {
-            $imgLocation = storage_path('app/public/img/companies/' . $company->logo);
-            if (file_exists($imgLocation)) {
-                unlink($imgLocation);
-            }
+            $imageStorage->deleteImage($company->logo);
         }
         $company->delete();
 
