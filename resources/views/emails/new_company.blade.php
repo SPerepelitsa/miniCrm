@@ -8,7 +8,25 @@
     <title>New company!</title>
 </head>
 <body>
-<h1>New Company!</h1>
-<p>There is a new company entered {{$name}}!</p>
+<div class="container">
+<div class="row create-wrap">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="text-center">
+            <br><br>
+            <h2>There is a new company entered!</h2>
+            <p>Here is a description of a company below.</p>
+            <hr>
+        </div>
+        <div class="text-center">
+            <p><b>Name: </b>{{$companyName}}</p>
+            <p><b>Email: </b>{{$companyEmail}}</p>
+            <p><b>Website: </b>{{$companyWebsite}}</p>
+            <hr>
+        </div>
+    </div>
+</div>
+<!--/.row-->
+</div>
+<!--/.container-->
 </body>
 </html>
