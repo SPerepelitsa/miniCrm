@@ -34,7 +34,7 @@
                     <th scope="col">Company</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
-                    <th scope="col">Action</th>
+                    <th class="no-sort" scope="col" width="200">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -49,21 +49,17 @@
                         <td>{{$employee->email}}</td>
                         <td>{{$employee->phone}}</td>
                         <td>
-                            <div class="btn-group">
-                                <button><a href="{{ route('employees.show', $employee->id) }}"><i class="fa fa-eye"></i></a>
+                            <form action="{{ route('employees.destroy', $employee->id) }}" method="post" role="form" class="employeeForm">
+                                <a href="{{ route('employees.show', $employee->id) }}" class="btn btn-primary">Show</a>
+                                <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-warning">Edit</a>
+                                {{ method_field('DELETE') }}
+                                <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
+                                <button class="btn btn-danger" type="submit" onclick='return confirm("Are you sure you want to delete this employee?");'>
+                                    Delete
                                 </button>
-                                <button><a href="{{ route('employees.edit', $employee->id) }}"><i
-                                            class="fa fa-pencil text-warning"></i></a></button>
-                                <form action="{{ route('employees.destroy', $employee->id) }}" method="post" role="form"
-                                      class="employeeForm">
-                                    {{ method_field('DELETE') }}
-                                    <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
-                                    <button type="submit"
-                                            onclick='return confirm("Are you sure you want to delete this employee?");'><i
-                                            class="fa fa-trash text-danger"></i></button>
-                                </form>
-                            </div>
+                            </form>
                         </td>
+                    </tr>
 
                 @endforeach
 
@@ -80,7 +76,18 @@
 @section('js')
     <script type="text/javascript">
         $(document).ready( function () {
-            $('#employeesTable').DataTable();
+            $('#employeesTable').DataTable({
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": true,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "lengthChange": false,
+                "columnDefs": [ {
+                    "targets": 'no-sort',
+                    "orderable": false,
+                } ]
+            });
         });
     </script>
 @endsection
