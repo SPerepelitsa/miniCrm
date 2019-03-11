@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Mail\NewCompanyEntered;
 use Image;
 use Session;
 use Mail;
 use Illuminate\Http\Request;
+use App\Filesystem\Storage\ImageStorage\ImageStorage;
 use App\Http\Requests\StoreCompany;
 
 class CompanyController extends Controller
@@ -43,25 +45,18 @@ class CompanyController extends Controller
     {
         $request->validated();
 
+        $imageStorage = new ImageStorage('companies');
         $company = new Company();
         $company->name = $request->name;
         $company->email = $request->email;
         $company->website = $request->website;
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = md5(microtime(true)) . "." . $image->getClientOriginalExtension();
-            $location = storage_path('app/public/img/companies/' . $filename);
-            Image::make($image)->resize(200, 200)->save($location);
+            $filename = $imageStorage->saveImage($request->file('image'));
             $company->logo = $filename;
         }
         $company->save();
 
-        Mail::send('emails.new_company', ['name'  => $company->name] , function($message)
-        {
-            $message->from('notifications@crm.com');
-            $message->to('admin@crm.com');
-            $message->subject('new company entered!');
-        });
+        Mail::to('admin@crm.com')->send(new NewCompanyEntered($company));
 
         return redirect()->route('companies.index')->with('success', 'Company was successfully created!');
     }
@@ -103,24 +98,19 @@ class CompanyController extends Controller
     {
         $request->validated();
 
-        $company = Company::find($id);
+        $imageStorage = new ImageStorage('companies');
+        $company = Company::findOrFail($id);
         $company->name = $request->name;
         $company->email = $request->email;
         $company->website = $request->website;
 
         //adds a new picture to the storage
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = md5(microtime(true)) . "." . $image->getClientOriginalExtension();
-            $location = storage_path('app/public/img/companies/' . $filename);
-            Image::make($image)->resize(200, 200)->save($location);
+            $filename = $imageStorage->saveImage($request->file('image'));
 
             //delets old picture from the storage if it exists.
             if ($company->logo != null) {
-                $imgLocation = storage_path('app/public/img/companies/' . $company->logo);
-                if (file_exists($imgLocation)) {
-                    unlink($imgLocation);
-                }
+                $imageStorage->deleteImage($company->logo);
             }
             $company->logo = $filename;
         }
@@ -137,12 +127,10 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
+        $imageStorage = new ImageStorage('companies');
         $company = Company::findOrFail($id);
         if ($company->logo != null) {
-            $imgLocation = storage_path('app/public/img/companies/' . $company->logo);
-            if (file_exists($imgLocation)) {
-                unlink($imgLocation);
-            }
+            $imageStorage->deleteImage($company->logo);
         }
         $company->delete();
 
