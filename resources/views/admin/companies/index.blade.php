@@ -32,7 +32,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Website</th>
-                    <th scope="col">Action</th>
+                    <th class="no-sort" scope="col" width="200">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -45,21 +45,17 @@
                         <td>{{$company->email}}</td>
                         <td>{{$company->website}}</td>
                         <td>
-                            <div class="btn-group">
-                                <button><a href="{{ route('companies.show', $company->id) }}"><i class="fa fa-eye"></i></a>
+                            <form action="{{ route('companies.destroy', $company->id) }}" method="post" role="form" class="companyForm">
+                                <a href="{{ route('companies.show', $company->id) }}" class="btn btn-primary">Show</a>
+                                <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-warning">Edit</a>
+                                {{ method_field('DELETE') }}
+                                <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
+                                <button class="btn btn-danger" type="submit" onclick='return confirm("Are you sure you want to delete this company?");'>
+                                    Delete
                                 </button>
-                                <button><a href="{{ route('companies.edit', $company->id) }}"><i
-                                            class="fa fa-pencil text-warning"></i></a></button>
-                                <form action="{{ route('companies.destroy', $company->id) }}" method="post" role="form"
-                                      class="companyForm">
-                                    {{ method_field('DELETE') }}
-                                    <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
-                                    <button type="submit"
-                                            onclick='return confirm("Are you sure you want to delete this company?");'><i
-                                            class="fa fa-trash text-danger"></i></button>
-                                </form>
-                            </div>
+                            </form>
                         </td>
+                    </tr>
 
                 @endforeach
 
@@ -76,7 +72,18 @@
 @section('js')
     <script type="text/javascript">
         $(document).ready( function () {
-            $('#companiesTable').DataTable();
+            $('#companiesTable').DataTable({
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": true,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "lengthChange": false,
+                    "columnDefs": [ {
+                    "targets": 'no-sort',
+                    "orderable": false,
+                } ]
+            });
         });
     </script>
 @endsection
