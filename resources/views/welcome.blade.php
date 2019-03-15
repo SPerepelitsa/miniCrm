@@ -67,13 +67,15 @@
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
+                    <a href="{{ url('/lang/en') }}">EN</a>
+                    <a href="{{ url('/lang/ru') }}">RU</a>
                     @auth
-                        <a href="{{ url('/dashboard') }}">Dashboard</a>
+                        <a href="{{ url('/dashboard') }}">@lang('welcome.dashboard_menu')</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
+                        <a href="{{ route('login') }}">@lang('welcome.login_menu')</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+                            <a href="{{ route('register') }}">@lang('welcome.register_menu')</a>
                         @endif
                     @endauth
                 </div>
@@ -81,14 +83,14 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Welcome
+                    @lang('welcome.welcome')
                 </div>
 
                 <div class="description">
                     @auth
-                    <p>You are loged in!</p>
+                    <p>@lang('welcome.logged_in_message')</p>
                     @else
-                        <p>Please Log in!</p>
+                        <p>@lang('welcome.quest_message')</p>
                     @endauth
                 </div>
             </div>

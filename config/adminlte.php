@@ -112,11 +112,13 @@ return [
         [
             'text' => 'Companies',
             'url'  => 'admin/companies',
+            'icon'    => 'building',
             'icon_color' => 'yellow',
         ],
         [
             'text' => 'Employees',
             'url'  => 'admin/employees',
+            'icon'    => 'users',
             'icon_color' => 'aqua',
         ],
 
@@ -125,6 +127,21 @@ return [
             'text' => 'Profile',
             'url'  => 'admin/settings',
             'icon' => 'user',
+        ],
+
+        [
+            'text'    => 'Language',
+            'icon'    => 'language',
+            'submenu' => [
+                [
+                    'text' => 'English',
+                    'url'  => '/lang/en',
+                ],
+                [
+                    'text' => 'Russian',
+                    'url'  => '/lang/ru',
+                ],
+            ],
         ],
     ],
 

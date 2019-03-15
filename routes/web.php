@@ -16,6 +16,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//Set language route
+Route::get('lang/{lang}', function ($lang) {
+    Session::put('lang', $lang);
+
+    return redirect()->back();
+});
+
 //Auth route
 Auth::routes(['register' => false]);
 

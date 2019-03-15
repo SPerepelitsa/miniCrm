@@ -10,13 +10,13 @@
 
     <div class="row">
         <div class="col-md-10">
-            <h1>Employees list</h1>
+            <h1>@lang('admin/employees/index.header')</h1>
 
             @include('partials._validation_messages')
 
         </div>
         <div class="col-md-2">
-            <a href="{{ route('employees.create') }}" class="btn btn-lg btn-primary btn-block">New +</a>
+            <a href="{{ route('employees.create') }}" class="btn btn-lg btn-primary btn-block">@lang('admin/employees/index.create_new_button')</a>
         </div>
         <div class="col-md-12">
             <hr>
@@ -28,13 +28,13 @@
             <table id="employeesTable" class="table table-hover">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
-                    <th scope="col">Company</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th class="no-sort" scope="col" width="200">Action</th>
+                    <th scope="col">@lang('admin/employees/index.number')</th>
+                    <th scope="col">@lang('admin/employees/index.first_name')</th>
+                    <th scope="col">@lang('admin/employees/index.last_name')</th>
+                    <th scope="col">@lang('admin/employees/index.company')</th>
+                    <th scope="col">@lang('admin/employees/index.email')</th>
+                    <th scope="col">@lang('admin/employees/index.phone')</th>
+                    <th class="no-sort" scope="col" width="250">@lang('admin/employees/index.action')</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,12 +50,12 @@
                         <td>{{$employee->phone}}</td>
                         <td>
                             <form action="{{ route('employees.destroy', $employee->id) }}" method="post" role="form" class="employeeForm">
-                                <a href="{{ route('employees.show', $employee->id) }}" class="btn btn-primary">Show</a>
-                                <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-warning">Edit</a>
+                                <a href="{{ route('employees.show', $employee->id) }}" class="btn btn-primary">@lang('admin/employees/index.show_button')</a>
+                                <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-warning">@lang('admin/employees/index.edit_button')</a>
                                 {{ method_field('DELETE') }}
                                 <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
-                                <button class="btn btn-danger" type="submit" onclick='return confirm("Are you sure you want to delete this employee?");'>
-                                    Delete
+                                <button class="btn btn-danger" type="submit" onclick='return confirm("@lang('admin/employees/index.delete_confirm_message')");'>
+                                    @lang('admin/employees/index.delete_button')
                                 </button>
                             </form>
                         </td>
