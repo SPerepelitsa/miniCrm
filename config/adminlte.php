@@ -108,23 +108,40 @@ return [
     */
 
     'menu' => [
-        'MAIN NAVIGATION',
+        'main_navigation',
         [
-            'text' => 'Companies',
+            'text' => 'companies',
             'url'  => 'admin/companies',
+            'icon'    => 'building',
             'icon_color' => 'yellow',
         ],
         [
-            'text' => 'Employees',
+            'text' => 'employees',
             'url'  => 'admin/employees',
+            'icon'    => 'users',
             'icon_color' => 'aqua',
         ],
 
-        'ACCOUNT SETTINGS',
+        'account_settings',
         [
-            'text' => 'Profile',
+            'text' => 'profile',
             'url'  => 'admin/settings',
             'icon' => 'user',
+        ],
+
+        [
+            'text'    => 'language',
+            'icon'    => 'language',
+            'submenu' => [
+                [
+                    'text' => 'english',
+                    'url'  => '/lang/en',
+                ],
+                [
+                    'text' => 'russian',
+                    'url'  => '/lang/ru',
+                ],
+            ],
         ],
     ],
 
